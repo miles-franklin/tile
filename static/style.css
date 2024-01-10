@@ -1,0 +1,46 @@
+html {
+    margin: 1;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+#tile-container {
+    width: 100%;
+    height: 1000px;
+    display: flex;
+    flex-wrap: wrap;
+    border: dashed blue 1px;
+    position: relative;
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.tile {
+    width: 75px;
+    height: 150px;
+    margin: 10px;
+    cursor: move;
+    border: 5px solid #555;
+    position: absolute;
+}
+
+.tile > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#base_tile_1 {
+    top: 0px;
+    left: 0px;
+}
+
+#base_tile_2 {
+    top: 0px;
+    left: 100px;
+}

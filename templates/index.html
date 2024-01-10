@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<!-- <div id="tile_container" ondragover="allowDrop(event)"> -->
+<div id="tile_container" onload="//resizeCanvas();" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <canvas id="inner_canvas"></canvas>
+    <div id="base_tile_1" class="tile" ondragstart="drag_tile(event)">
+        <img src="https://www.nasa.gov/wp-content/uploads/2022/09/stsci-01ga76rm0c11w977jrhgj5j26x.png?resize=900,521">
+    </div>
+    <div id="base_tile_2" class="tile" ondragstart="drag_tile(event)">
+        <img src="https://photojournal.jpl.nasa.gov/jpeg/PIA25033.jpg">
+    </div>
+</div>
+
+<script>
+    var refTile = null;
+    var newTile = null;
+
+    // TODO: Show 4 dots over image on hover
+    // TODO: draw dynamic lines connecting tiles
+
+    function resizeCanvas() {
+        var canvs = document.getElementById("inner_canvas");
+        var div = document.getElementById("tile_container");
+        // canvs.width = window.innerWidth;
+        // canvs.height = window.innerHeight;
+    }
+
+    function allowDrop(event) {
+        event.preventDefault();
+    }
+
+    function drag_tile(event) {
+        console.log(event.target.parentNode);
+        refTile = event.target.parentNode;
+    }
+
+    function drop(event) {
+        event.preventDefault();
+        var x = event.clientX;
+        var y = event.clientY;
+        console.log("The mouse coordinates are (" + x + "," + y + ")");
+
+        var rect = refTile.getBoundingClientRect();
+        console.log(rect.top, rect.right, rect.bottom, rect.left);
+        console.log("W: "+ rect.width + " H: "+ rect.height);
+
+        newTile = refTile.cloneNode(true);
+        newTile.id = Date.now();
+        document.getElementById("tile_container").appendChild(newTile);
+        
+        newTile.style.position = 'absolute';
+        newTile.style.left = x - (rect.width/2) + window.scrollX/2 + 'px';
+        newTile.style.top = y - (rect.height/2) + window.scrollY/2 + 'px';
+        draw();
+    }
+
+    function draw_old() {
+        const canvas = document.getElementById("inner_canvas");
+
+        if (!canvas.getContext) {
+            console.log("Mission failed...")
+            return;
+        }
+        const ctx = canvas.getContext('2d');
+
+        // set line stroke and line width
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 5;
+
+        // Get Coordinates
+        var rectFrom = refTile.getBoundingClientRect();
+        var rectTo = newTile.getBoundingClientRect();
+
+        // draw a red line
+        ctx.beginPath();
+        ctx.moveTo(rectFrom.right, rectFrom.bottom);
+        ctx.lineTo(rectTo.left, rectTo.top);
+        
+        console.log("ctx.moveTo(", rectFrom.right, ",", rectFrom.bottom, ");");
+        console.log("ctx.lineTo(", rectTo.left, ",", rectTo.top, ");");
+        ctx.stroke();
+        console.log("Mission complete!")
+    }
+
+    function draw() {
+        const canvas = document.getElementById("inner_canvas");
+
+        if (!canvas.getContext) {
+            console.log("Mission failed...")
+            return;
+        }
+        const ctx = canvas.getContext('2d');
+
+        // set line stroke and line width
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 5;
+
+        // Get Coordinates
+        var rectFrom = refTile.getBoundingClientRect();
+        var rectTo = newTile.getBoundingClientRect();
+
+        ax = rectFrom.right + window.scrollX/2 - (rectFrom.width/2);
+        ay = rectFrom.bottom + window.scrollY/2 - (rectFrom.height/2);
+        bx = rectTo.right + window.scrollX/2 - (rectTo.width/2);
+        by = rectTo.bottom + window.scrollY/2 - (rectTo.height/2);
+
+        // draw a red line
+        ctx.beginPath();
+        ctx.moveTo(ax, ay);
+        ctx.lineTo(bx, by);
+        
+        console.log("ctx.moveTo(", ax, ",", ay, ");");
+        console.log("ctx.lineTo(", bx, ",", by, ");");
+        
+        ctx.stroke();
+        console.log("Mission complete!")
+    }
+
+</script>
+
+</body>
+</html>
